@@ -26,7 +26,7 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 // Conectar a la base de datos
 try {
   await db.authenticate();
-  await db.sync();
+  await db.sync({ alter: true });
   console.log("Conexión establecida exitosamente.");
 } catch (error) {
   console.error("No se pudo conectar a la base de datos:", error);

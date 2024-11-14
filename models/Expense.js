@@ -18,6 +18,11 @@ const Expense = db.define("expenses", {
     type: DataTypes.DATE(),
     allowNull: false,
   },
+  usuarioId: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    allowNull: false,
+  },
 });
 
 export default Expense;
