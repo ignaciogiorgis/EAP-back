@@ -55,4 +55,14 @@ const createExpense = async (req, res) => {
   });
 };
 
-export { createExpense };
+const showExpenses = async (req, res) => {
+  try {
+    const expenses = await Expense.findAll();
+    res.status(200).json(expenses);
+  } catch (error) {
+    console.error("Error al obtener los gastos:", error);
+    res.status(500).json({ error: "Hubo un problema al obtener los gastos" });
+  }
+};
+
+export { createExpense, showExpenses };
