@@ -4,21 +4,21 @@ import Expense from "../models/Expense.js";
 const createExpense = async (req, res) => {
   await check("name")
     .notEmpty()
-    .withMessage("El nombre no puede ir vacio")
+    .withMessage("The name cannot be empty")
     .run(req);
   await check("value")
     .notEmpty()
     .isInt()
-    .withMessage("El valor no puede ir vacio ")
+    .withMessage("The value cannot be empty ")
     .run(req);
   await check("description")
     .notEmpty()
-    .withMessage("La descripcion no puede ir vacia")
+    .withMessage("The description cannot be empty")
     .run(req);
   await check("date")
     .notEmpty()
     .isDate()
-    .withMessage("La descripcion no puede ir vacia")
+    .withMessage("The date cannot be empty")
     .run(req);
 
   const result = validationResult(req);
@@ -45,7 +45,7 @@ const createExpense = async (req, res) => {
   });
 
   return res.status(201).json({
-    messege: "Gasto creado correctamente",
+    messege: "Successfully created expense",
     expense: {
       id: expense.id,
       name: expense.name,
@@ -60,9 +60,66 @@ const showExpenses = async (req, res) => {
     const expenses = await Expense.findAll();
     res.status(200).json(expenses);
   } catch (error) {
-    console.error("Error al obtener los gastos:", error);
-    res.status(500).json({ error: "Hubo un problema al obtener los gastos" });
+    console.error("Error obtaining expenses:", error);
+    res
+      .status(500)
+      .json({ error: "There was a problem obtaining the expenses" });
   }
 };
 
-export { createExpense, showExpenses };
+const editExpense = async (req, res) => {
+  await check("name")
+    .notEmpty()
+    .withMessage("The name cannot be empty")
+    .run(req);
+  await check("value")
+    .notEmpty()
+    .isInt()
+    .withMessage("The value cannot be empty ")
+    .run(req);
+  await check("description")
+    .notEmpty()
+    .withMessage("The description cannot be empty")
+    .run(req);
+  await check("date")
+    .notEmpty()
+    .isDate()
+    .withMessage("The date cannot be empty")
+    .run(req);
+
+  const result = validationResult(req);
+
+  if (!result.isEmpty()) {
+    return res.status(400).json({ error: result.array() });
+  }
+
+  const { id } = req.params;
+  const { name, value, description, date } = req.body;
+
+  try {
+    const expense = await Expense.findByPk(id);
+
+    if (!expense) {
+      return res.status(404).json({ error: "Expense not Found" });
+    }
+
+    await expense.update({
+      name: name ?? expense.name,
+      value: value ?? expense.value,
+      description: description ?? expense.description,
+      date: date ?? expense.date,
+    });
+
+    return res.status(200).json({
+      message: "Expense updated correctly",
+      expense,
+    });
+  } catch (error) {
+    console.error("Error updating expense:", error);
+    return res
+      .status(500)
+      .json({ error: "There was a problem updating the expense" });
+  }
+};
+
+export { createExpense, showExpenses, editExpense };
