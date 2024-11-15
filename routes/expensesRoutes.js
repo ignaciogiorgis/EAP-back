@@ -1,8 +1,11 @@
 import express from "express";
-import { createExpense } from "../controllers/expensesController.js";
+import {
+  createExpense,
+  showExpenses,
+} from "../controllers/expensesController.js";
 
 const router = express.Router();
 
-router.post("/expenses", createExpense);
-
+router.post("/expense", createExpense);
+router.get("/expense", showExpenses);
 export default router;
