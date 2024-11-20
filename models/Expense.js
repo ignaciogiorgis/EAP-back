@@ -18,6 +18,10 @@ const Expense = db.define("expenses", {
     type: DataTypes.DATE(),
     allowNull: false,
   },
+  isDeleted: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false, // Por defecto, no está eliminado
+  },
   usuarioId: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,

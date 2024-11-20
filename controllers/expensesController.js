@@ -57,7 +57,11 @@ const createExpense = async (req, res) => {
 
 const showExpenses = async (req, res) => {
   try {
-    const expenses = await Expense.findAll();
+    const expenses = await Expense.findAll({
+      where: {
+        isDeleted: false,
+      },
+    });
     res.status(200).json(expenses);
   } catch (error) {
     console.error("Error obtaining expenses:", error);
@@ -122,4 +126,25 @@ const editExpense = async (req, res) => {
   }
 };
 
-export { createExpense, showExpenses, editExpense };
+const deleteExpense = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Busca el gasto por su ID
+    const expense = await Expense.findByPk(id);
+
+    if (!expense) {
+      return res.status(404).json({ message: "Expense not found" });
+    }
+
+    // Actualiza el campo `isDeleted` a true
+    await expense.update({ isDeleted: true });
+
+    res.status(200).json({ message: "Expense deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export { createExpense, showExpenses, editExpense, deleteExpense };
