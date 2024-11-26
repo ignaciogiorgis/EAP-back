@@ -1,8 +1,7 @@
 import express from "express";
-import csrf from "csurf";
-import cookieParser from "cookie-parser";
 import usuarioRoute from "./routes/usuariosRoutes.js";
 import expenseRoute from "./routes/expensesRoutes.js";
+import productRoute from "./routes/productsRoute.js";
 import cors from "cors";
 import db from "./config/db.js";
 
@@ -18,11 +17,6 @@ app.use(
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
-// Habilitar cookies
-// app.use(cookieParser());
-
-// app.use(csrf({ cookie: false }));
-
 // Conectar a la base de datos
 try {
   await db.authenticate();
@@ -37,8 +31,8 @@ app.use(express.static("public"));
 
 // Definir las rutas (API)
 app.use("/auth", usuarioRoute);
-app.use("/dashboard", expenseRoute); // Rutas de autenticación
-
+app.use("/dashboard", expenseRoute);
+app.use("/dashboard", productRoute);
 // Definir el puerto del servidor
 const port = process.env.PORT || 5000;
 
