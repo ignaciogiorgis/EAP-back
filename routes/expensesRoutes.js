@@ -11,5 +11,5 @@ const router = express.Router();
 router.post("/expense", createExpense);
 router.get("/expense", showExpenses);
 router.put("/expense/:id", editExpense);
-router.patch("/expense/delete/:id", deleteExpense);
+router.patch("/expense/:id", deleteExpense);
 export default router;
