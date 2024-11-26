@@ -1,23 +1,25 @@
 import { check, validationResult } from "express-validator";
-import Expense from "../models/Expense.js";
+import Product from "../models/Product.js";
+
 const createProduct = async (req, res) => {
   await check("name")
     .notEmpty()
     .withMessage("The name cannot be empty")
     .run(req);
-  await check("value")
+  await check("quantity")
     .notEmpty()
-    .isInt()
-    .withMessage("The value cannot be empty ")
+    .isFloat()
+    .withMessage("The quantity cannot be empty ")
     .run(req);
-  await check("description")
+  await check("cost")
     .notEmpty()
-    .withMessage("The description cannot be empty")
+    .isFloat()
+    .withMessage("The cost cannot be empty")
     .run(req);
-  await check("date")
+  await check("profit")
     .notEmpty()
-    .isDate()
-    .withMessage("The date cannot be empty")
+    .isFloat()
+    .withMessage("The profit cannot be empty")
     .run(req);
 
   const result = validationResult(req);
@@ -25,31 +27,34 @@ const createProduct = async (req, res) => {
   if (!result.isEmpty()) {
     return res.status(400).json({
       error: result.array(),
-      expense: {
+      product: {
         name: req.body.name,
-        value: req.body.value,
-        description: req.body.description,
-        date: req.body.date,
+        quantity: req.body.quantity,
+        cost: req.body.cost,
+        profit: req.body.profit,
       },
     });
   }
 
-  const { name, value, description, date } = req.body;
+  const { name, quantity, cost, profit } = req.body;
 
-  const expense = await Expense.create({
+  const product = await Product.create({
     name,
-    value,
-    description,
-    date,
+    quantity,
+    cost,
+    profit,
   });
 
   return res.status(201).json({
-    messege: "Successfully created expense",
-    expense: {
-      id: expense.id,
-      name: expense.name,
-      value: expense.value,
-      description: expense.description,
+    messege: "Successfully created product",
+    product: {
+      id: product.id,
+      name: product.name,
+      quantity: product.value,
+      cost: product.description,
+      profit: product.profit,
     },
   });
 };
+
+export { createProduct };
