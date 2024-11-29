@@ -18,6 +18,10 @@ const Product = db.define("products", {
     type: DataTypes.FLOAT(),
     allowNull: false,
   },
+  isDeleted: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false, // Por defecto, no está eliminado
+  },
 });
 
 export default Product;
