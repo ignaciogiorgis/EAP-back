@@ -1,10 +1,10 @@
 import { DataTypes } from "sequelize";
 import db from "../config/db.js";
 
-const Usuario = db.define(
-  "usuarios",
+const User = db.define(
+  "users",
   {
-    nombre: {
+    name: {
       type: DataTypes.STRING(60),
       allowNull: false,
     },
@@ -25,7 +25,7 @@ const Usuario = db.define(
   },
   {
     scopes: {
-      eliminarPassword: {
+      daletePassword: {
         attributes: {
           exclude: ["password", "token", "confirm", "createdAt", "updatedAt"],
         },
@@ -34,4 +34,4 @@ const Usuario = db.define(
   }
 );
 
-export default Usuario;
+export default User;

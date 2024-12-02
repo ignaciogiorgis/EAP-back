@@ -3,11 +3,11 @@ import {
   register,
   confirmRegister,
   resetPassword,
-  comprobationToken,
+  verificationToken,
   newPassword,
   authUser,
   logout,
-} from "../controllers/usuariosController.js";
+} from "../controllers/usersController.js";
 
 const router = express.Router();
 
@@ -21,7 +21,7 @@ router.get("/confirm/:token", confirmRegister); // Confirmar registro con el tok
 
 // Rutas para recuperación de contraseña
 router.post("/recover", resetPassword); // Enviar instrucciones de recuperación
-router.get("/recover/:token", comprobationToken); // Comprobar token para reset
+router.get("/recover/:token", verificationToken); // Comprobar token para reset
 router.post("/recover/:token", newPassword); // Actualizar nueva contraseña
 
 export default router;
