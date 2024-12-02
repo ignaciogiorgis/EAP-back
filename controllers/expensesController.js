@@ -112,6 +112,12 @@ const editExpense = async (req, res) => {
       return res.status(404).json({ error: "Expense not Found" });
     }
 
+    if (Number(expense?.dataValues?.usuarioId) !== req.user.userId) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to edit this expense" });
+    }
+
     await expense.update({
       name: name ?? expense.name,
       value: value ?? expense.value,
@@ -140,6 +146,12 @@ const deleteExpense = async (req, res) => {
 
     if (!expense) {
       return res.status(404).json({ message: "Expense not found" });
+    }
+
+    if (Number(expense?.dataValues?.usuarioId) !== req.user.userId) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to delete this expense" });
     }
 
     // Actualiza el campo `isDeleted` a true
