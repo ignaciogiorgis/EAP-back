@@ -1,5 +1,5 @@
 import express from "express";
-import usuarioRoute from "./routes/usuariosRoutes.js";
+import userRoute from "./routes/usersRoutes.js";
 import expenseRoute from "./routes/expensesRoutes.js";
 import productRoute from "./routes/productsRoute.js";
 import cors from "cors";
@@ -30,7 +30,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Definir las rutas (API)
-app.use("/auth", usuarioRoute);
+app.use("/auth", userRoute);
 app.use("/dashboard", expenseRoute);
 app.use("/dashboard", productRoute);
 // Definir el puerto del servidor
