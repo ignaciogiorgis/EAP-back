@@ -36,12 +36,14 @@ const createExpense = async (req, res) => {
   }
 
   const { name, value, description, date } = req.body;
+  const { userId } = req.user;
 
   const expense = await Expense.create({
     name,
     value,
     description,
     date,
+    usuarioId: userId,
   });
 
   return res.status(201).json({
@@ -51,15 +53,18 @@ const createExpense = async (req, res) => {
       name: expense.name,
       value: expense.value,
       description: expense.description,
+      date: expense.date,
     },
   });
 };
 
 const showExpenses = async (req, res) => {
+  const { userId } = req.user;
   try {
     const expenses = await Expense.findAll({
       where: {
         isDeleted: false,
+        usuarioId: userId,
       },
     });
     res.status(200).json(expenses);
