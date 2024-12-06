@@ -20,7 +20,12 @@ const Product = db.define("products", {
   },
   isDeleted: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false, // Por defecto, no está eliminado
+    defaultValue: false, 
+  },
+  usuarioId: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    allowNull: false,
   },
 });
 

@@ -37,12 +37,14 @@ const createProduct = async (req, res) => {
   }
 
   const { name, quantity, cost, profit } = req.body;
+  const { userId } = req.user;
 
   const product = await Product.create({
     name,
     quantity,
     cost,
     profit,
+    usuarioId: userId,
   });
 
   return res.status(201).json({
@@ -58,10 +60,12 @@ const createProduct = async (req, res) => {
 };
 
 const showProducts = async (req, res) => {
+  const { userId } = req.user;
   try {
     const products = await Product.findAll({
       where: {
         isDeleted: false,
+        usuarioId: userId,
       },
     });
     res.status(200).json(products);
@@ -109,6 +113,11 @@ const editProduct = async (req, res) => {
     if (!product) {
       return res.status(404).json({ error: "Product not Found" });
     }
+    if (Number(product?.dataValues?.usuarioId) !== req.user.userId) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to edit this Product" });
+    }
 
     await product.update({
       name: name ?? product.name,
@@ -138,6 +147,11 @@ const deleteProduct = async (req, res) => {
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
+    }
+    if (Number(product?.dataValues?.usuarioId) !== req.user.userId) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to delete this product" });
     }
 
     // Actualiza el campo `isDeleted` a true
