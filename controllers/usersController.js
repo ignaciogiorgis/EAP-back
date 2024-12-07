@@ -1,8 +1,8 @@
-import { check, validationResult } from "express-validator";
-import User from "../models/User.js";
-import { generarId, generarJWT } from "../helpers/tokens.js";
-import { emailRegister, emailRecover } from "../helpers/emails.js";
-import bcrypt from "bcrypt";
+const { check, validationResult } = require("express-validator");
+const User = require("../models/User.js");
+const { generarId, generarJWT } = require("../helpers/tokens.js");
+const { emailRegister, emailRecover } = require("../helpers/emails.js");
+const bcrypt = require("bcrypt");
 
 // Autenticación del user
 const authUser = async (req, res) => {
@@ -244,7 +244,7 @@ const logout = (req, res) => {
   res.status(200).json({ message: "Logout successful" });
 };
 
-export {
+module.exports = {
   register,
   confirmRegister,
   resetPassword,

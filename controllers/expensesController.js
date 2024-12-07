@@ -1,5 +1,5 @@
-import { check, validationResult } from "express-validator";
-import Expense from "../models/Expense.js";
+const { check, validationResult } = require("express-validator");
+const Expense = require("../models/Expense.js");
 
 const createExpense = async (req, res) => {
   await check("name")
@@ -166,4 +166,4 @@ const deleteExpense = async (req, res) => {
   }
 };
 
-export { createExpense, showExpenses, editExpense, deleteExpense };
+module.exports = { createExpense, showExpenses, editExpense, deleteExpense };

@@ -1,5 +1,5 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   register,
   confirmRegister,
   resetPassword,
@@ -7,7 +7,7 @@ import {
   newPassword,
   authUser,
   logout,
-} from "../controllers/usersController.js";
+} = require("../controllers/usersController.js");
 
 const router = express.Router();
 
@@ -24,4 +24,4 @@ router.post("/recover", resetPassword); // Enviar instrucciones de recuperación
 router.get("/recover/:token", verificationToken); // Comprobar token para reset
 router.post("/recover/:token", newPassword); // Actualizar nueva contraseña
 
-export default router;
+module.exports = router;

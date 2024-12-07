@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../config/db.js";
+const { DataTypes } = require("sequelize");
+const db = require("../config/db.js");
 
 const Expense = db.define("expenses", {
   name: {
@@ -29,4 +29,4 @@ const Expense = db.define("expenses", {
   },
 });
 
-export default Expense;
+module.exports = Expense;

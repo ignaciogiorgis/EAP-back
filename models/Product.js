@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../config/db.js";
+const { DataTypes } = require("sequelize");
+const db = require("../config/db.js");
 
 const Product = db.define("products", {
   name: {
@@ -20,7 +20,7 @@ const Product = db.define("products", {
   },
   isDeleted: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false, 
+    defaultValue: false,
   },
   usuarioId: {
     type: DataTypes.UUID,
@@ -29,4 +29,4 @@ const Product = db.define("products", {
   },
 });
 
-export default Product;
+module.exports = Product;
