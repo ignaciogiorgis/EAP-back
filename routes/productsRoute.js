@@ -1,11 +1,11 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   createProduct,
   showProducts,
   editProduct,
   deleteProduct,
-} from "../controllers/productController.js";
-import authenticateUser from "../middlewares/authenticateUser.js";
+} = require("../controllers/productController.js");
+const authenticateUser = require("../middlewares/authenticateUser.js");
 
 const router = express.Router();
 
@@ -14,4 +14,4 @@ router.get("/product", authenticateUser, showProducts);
 router.put("/product/:id", authenticateUser, editProduct);
 router.patch("/product/:id", authenticateUser, deleteProduct);
 
-export default router;
+module.exports = router;

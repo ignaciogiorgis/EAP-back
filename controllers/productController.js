@@ -1,5 +1,5 @@
-import { check, validationResult } from "express-validator";
-import Product from "../models/Product.js";
+const { check, validationResult } = require("express-validator");
+const Product = require("../models/Product.js");
 
 const createProduct = async (req, res) => {
   await check("name")
@@ -166,4 +166,4 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-export { createProduct, showProducts, editProduct, deleteProduct };
+module.exports = { createProduct, showProducts, editProduct, deleteProduct };

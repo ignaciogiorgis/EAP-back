@@ -1,11 +1,11 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   createExpense,
   showExpenses,
   editExpense,
   deleteExpense,
-} from "../controllers/expensesController.js";
-import authenticateUser from "../middlewares/authenticateUser.js";
+} = require("../controllers/expensesController.js");
+const authenticateUser = require("../middlewares/authenticateUser.js");
 
 const router = express.Router();
 
@@ -13,4 +13,5 @@ router.post("/expense", authenticateUser, createExpense);
 router.get("/expense", authenticateUser, showExpenses);
 router.put("/expense/:id", authenticateUser, editExpense);
 router.patch("/expense/:id", authenticateUser, deleteExpense);
-export default router;
+
+module.exports = router;

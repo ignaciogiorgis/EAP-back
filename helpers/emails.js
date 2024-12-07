@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+const nodemailer = require("nodemailer");
 
 const emailRegister = async (datos) => {
   const transport = nodemailer.createTransport({
@@ -54,4 +54,4 @@ const emailRecover = async (datos) => {
   });
 };
 
-export { emailRegister, emailRecover };
+module.exports = { emailRegister, emailRecover };
