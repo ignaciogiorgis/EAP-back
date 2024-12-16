@@ -1,10 +1,15 @@
-const Usuario = require("./Usuario.js");
+const User = require("./User.js");
 const Expense = require("./Expense.js");
 const Product = require("./Product.js");
+const Client = require("./Client.js");
 
-Usuario.hasMany(Expense, { foreignKey: "usuarioId", as: "expenses" });
-Expense.belongsTo(Usuario, { foreignKey: "usuarioId", as: "usuario" });
-Usuario.hasMany(Product, { foreignKey: "usuarioId", as: "products" });
-Product.belongsTo(Usuario, { foreignKey: "usuarioId", as: "usuario" });
+User.hasMany(Client, { foreignKey: "usuarioId", as: "client" });
+Client.belongsTo(User, { foreignKey: "usuarioId", as: "usuario" });
 
-module.exports = { Usuario, Expense, Product };
+User.hasMany(Expense, { foreignKey: "usuarioId", as: "expenses" });
+Expense.belongsTo(User, { foreignKey: "usuarioId", as: "usuario" });
+
+User.hasMany(Product, { foreignKey: "usuarioId", as: "products" });
+Product.belongsTo(User, { foreignKey: "usuarioId", as: "usuario" });
+
+module.exports = { User, Expense, Product, Client };
