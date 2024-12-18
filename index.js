@@ -34,7 +34,7 @@ app.use("/dashboard", clientRoute);
 const startServer = async () => {
   try {
     await db.authenticate();
-    await db.sync({ alter: true });
+    await db.sync();
     console.log("Conexión establecida exitosamente.");
 
     const port = process.env.PORT || 5000;
