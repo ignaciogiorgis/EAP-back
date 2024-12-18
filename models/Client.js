@@ -27,8 +27,12 @@ const Client = db.define("clients", {
     allowNull: false,
   },
   phone: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     allowNull: false,
+  },
+  isDeleted: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
   },
   usuarioId: {
     type: DataTypes.UUID,
