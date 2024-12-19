@@ -23,12 +23,20 @@ const Client = db.define("clients", {
     allowNull: false,
   },
   dni: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING(10),
     allowNull: false,
+    validate: {
+      isNumeric: true,
+      len: [7, 10],
+    },
   },
   phone: {
-    type: DataTypes.BIGINT,
+    type: DataTypes.STRING(15),
     allowNull: false,
+    validate: {
+      isNumeric: true,
+      len: [10, 15],
+    },
   },
   isDeleted: {
     type: DataTypes.BOOLEAN,

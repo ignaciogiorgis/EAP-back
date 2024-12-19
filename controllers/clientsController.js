@@ -1,6 +1,4 @@
 const { check, validationResult } = require("express-validator");
-const { generarId, generarJWT } = require("../helpers/tokens.js");
-const { emailRegister, emailRecover } = require("../helpers/emails.js");
 const Client = require("../models/Client.js");
 
 const createClient = async (req, res) => {
@@ -72,13 +70,6 @@ const createClient = async (req, res) => {
     phone,
     usuarioId: userId,
   });
-
-  // Enviar email de confirmación
-  //  emailRegister({
-  //    name: user.name,
-  //    email: user.email,
-  //    token: user.token,
-  //  });
 
   return res.status(201).json({
     message: "Client created successfully.",
