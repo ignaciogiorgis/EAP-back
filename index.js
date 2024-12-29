@@ -4,6 +4,7 @@ const userRoute = require("./routes/usersRoutes.js");
 const expenseRoute = require("./routes/expensesRoutes.js");
 const productRoute = require("./routes/productsRoute.js");
 const clientRoute = require("./routes/clientsRoutes.js");
+const saleRoute = require("./routes/salesRoutes.js");
 const db = require("./config/db.js");
 
 const app = express();
@@ -30,6 +31,7 @@ app.use("/auth", userRoute);
 app.use("/dashboard", expenseRoute);
 app.use("/dashboard", productRoute);
 app.use("/dashboard", clientRoute);
+app.use("/dashboard", saleRoute);
 
 const startServer = async () => {
   try {
