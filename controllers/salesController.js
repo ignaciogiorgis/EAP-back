@@ -4,21 +4,22 @@ const { Client } = require("../models/Client");
 
 const createSale = async (req, res) => {
   try {
-    const { productId, clientId, quantity } = req.body;
+    // Extraer los datos del cuerpo de la solicitud
+    const { productName, clientName, quantity } = req.body;
 
-    // Verificar existencia del producto
-    const product = await Product.findByPk(productId);
+    // Buscar el producto utilizando el nombre (asumiendo que tienes un método para ello)
+    const product = await Product.findOne({ where: { name: productName } });
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
     // Verificar stock disponible
-    if (product.stock < quantity) {
+    if (product.quantity < quantity) {
       return res.status(400).json({ message: "Insufficient stock" });
     }
 
-    // Verificar existencia del cliente
-    const client = await Client.findByPk(clientId);
+    // Buscar el cliente utilizando el nombre (asumiendo que tienes un método para ello)
+    const client = await Client.findOne({ where: { name: clientName } });
     if (!client) {
       return res.status(404).json({ message: "Client not found" });
     }
@@ -29,8 +30,8 @@ const createSale = async (req, res) => {
 
     // Crear la venta
     const sale = await Sale.create({
-      productId,
-      clientId,
+      productId: product.id, // Usar el ID del producto encontrado
+      clientId: client.id, // Usar el ID del cliente encontrado
       quantity,
       price,
       total,
@@ -39,7 +40,7 @@ const createSale = async (req, res) => {
     });
 
     // Reducir stock del producto
-    await product.update({ stock: product.quantity - quantity });
+    await product.update({ quantity: product.quantity - quantity });
 
     // Responder con datos de la venta y cliente
     res.status(201).json({
@@ -51,5 +52,4 @@ const createSale = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
 module.exports = { createSale };
