@@ -52,4 +52,45 @@ const createSale = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-module.exports = { createSale };
+const showSales = async (req, res) => {
+  try {
+    const { userId } = req.user;
+
+    const sales = await Sale.findAll({
+      where: {
+        isDeleted: false,
+        usuarioId: userId,
+      },
+      include: [
+        {
+          model: Product,
+          attributes: ["name", "cost", "profit"],
+        },
+        {
+          model: Client,
+          attributes: ["name", "phone", "email"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+      attributes: {
+        exclude: ["isDeleted"], // No necesitamos enviar este campo al cliente
+      },
+    });
+
+    // Si no hay ventas, devolver array vacío
+    if (!sales || sales.length === 0) {
+      return res.status(200).json([]);
+    }
+
+    res.status(200).json(sales);
+  } catch (error) {
+    console.error("Error al obtener las ventas:", error);
+    res.status(500).json({
+      error: {
+        msg: "Error al obtener las ventas",
+        details: error.message,
+      },
+    });
+  }
+};
+module.exports = { createSale, showSales };
