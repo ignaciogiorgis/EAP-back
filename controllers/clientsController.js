@@ -1,6 +1,7 @@
 const { check, validationResult } = require("express-validator");
 const Client = require("../models/Client.js");
 
+
 const createClient = async (req, res) => {
   await check("firstName")
     .notEmpty()
