@@ -24,7 +24,9 @@ Sale.belongsTo(Product, { foreignKey: "productId", as: "product" });
 Client.hasMany(Sale, { foreignKey: "clientId", as: "sales" });
 Sale.belongsTo(Client, { foreignKey: "clientId", as: "client" });
 
-Sale.belongsTo(Product, { foreignKey: "productId" }); // Asociar venta con producto
+// Relación User -> Sale
+User.hasMany(Sale, { foreignKey: "usuarioId", as: "sales" });
+Sale.belongsTo(User, { foreignKey: "usuarioId", as: "usuario" });
 
 
 module.exports = { User, Expense, Product, Client, Sale };

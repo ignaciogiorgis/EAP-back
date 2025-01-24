@@ -41,6 +41,11 @@ const Sale = db.define("sales", {
       key: "id",
     },
   },
+  usuarioId: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    allowNull: false,
+  },
 });
 
 module.exports = Sale;
