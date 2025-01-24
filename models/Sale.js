@@ -2,12 +2,12 @@ const { DataTypes } = require("sequelize");
 const db = require("../config/db.js");
 
 const Sale = db.define("sales", {
-  productId: {
-    type: DataTypes.INTEGER,
+  productName: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
-  clientId: {
-    type: DataTypes.INTEGER,
+  clientName: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
   quantity: {
@@ -16,10 +16,6 @@ const Sale = db.define("sales", {
     validate: {
       min: 1,
     },
-  },
-  price: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
   },
   total: {
     type: DataTypes.FLOAT,
@@ -37,6 +33,13 @@ const Sale = db.define("sales", {
   isDeleted: {
     type: DataTypes.BOOLEAN,
     defaultValue: false, // Por defecto, no está eliminado
+  },
+  productId: {
+    type: DataTypes.INTEGER, // Clave foránea que conecta con el modelo Product
+    references: {
+      model: "products", // Nombre de la tabla en la base de datos
+      key: "id",
+    },
   },
 });
 
