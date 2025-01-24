@@ -7,6 +7,7 @@ const createSale = async (req, res) => {
     // Extraer los datos del cuerpo de la solicitud
     const { productName, clientName, quantity, total, paid, saleDate } =
       req.body;
+    const { userId } = req.user;
     // Buscar el producto por nombre
     const product = await Product.findOne({ where: { name: productName } });
     if (!product) {
@@ -31,6 +32,7 @@ const createSale = async (req, res) => {
       paid, // Estado del pago
       saleDate: new Date(saleDate), // Convertir la fecha a un objeto Date
       productId: product.id,
+      usuarioId: userId,
     });
     // Responder con los datos de la venta
     res.status(201).json({
@@ -50,7 +52,6 @@ const showSales = async (req, res) => {
         isDeleted: false, // Solo ventas que no están eliminadas
       },
     });
-    console.log("sales", sales);
     res.status(200).json(sales);
   } catch (error) {
     console.error("Error obtaining sales:", error);
@@ -58,4 +59,39 @@ const showSales = async (req, res) => {
   }
 };
 
-module.exports = { createSale, showSales };
+const editSale = async (req, res) => {
+  const { id } = req.params;
+  const { productName, clientName, quantity, total, paid, saleDate } = req.body;
+
+  try {
+    const sale = await Sale.findByPk(id);
+
+    if (!sale) {
+      return res.status(404).json({ error: "Sale not Found" });
+    }
+    if (Number(sale?.dataValues?.usuarioId) !== req.user.userId) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to edit this Product" });
+    }
+
+    await product.update({
+      productName: productName ?? product.name,
+      quantity: quantity ?? product.quantity,
+      cost: cost ?? product.cost,
+      profit: profit ?? product.profit,
+    });
+
+    return res.status(200).json({
+      message: "Product updated correctly",
+      product,
+    });
+  } catch (error) {
+    console.error("Error updating Product:", error);
+    return res
+      .status(500)
+      .json({ error: "There was a problem updating the Product" });
+  }
+};
+
+module.exports = { createSale, showSales, editSale };
