@@ -62,7 +62,16 @@ const showSales = async (req, res) => {
 const editSale = async (req, res) => {
   const { id } = req.params;
   const { productName, clientName, quantity, total, paid, saleDate } = req.body;
-
+  console.log(
+    id,
+    productName,
+    clientName,
+    quantity,
+    total,
+    paid,
+    saleDate,
+    "back"
+  );
   try {
     const sale = await Sale.findByPk(id);
 
@@ -75,22 +84,23 @@ const editSale = async (req, res) => {
         .json({ error: "You do not have permission to edit this Product" });
     }
 
-    await product.update({
-      productName: productName ?? product.name,
-      quantity: quantity ?? product.quantity,
-      cost: cost ?? product.cost,
-      profit: profit ?? product.profit,
+    await sale.update({
+      productName: productName ?? sale.name,
+      clientName: clientName ?? sale.clientName,
+      quantity: quantity ?? sale.quantity,
+      paid: paid ?? sale.paid,
+      saleDate: saleDate ?? sale.saleDate,
     });
 
     return res.status(200).json({
-      message: "Product updated correctly",
-      product,
+      message: "Sale updated correctly",
+      sale,
     });
   } catch (error) {
-    console.error("Error updating Product:", error);
+    console.error("Error updating Sale:", error);
     return res
       .status(500)
-      .json({ error: "There was a problem updating the Product" });
+      .json({ error: "There was a problem updating the Sale" });
   }
 };
 
