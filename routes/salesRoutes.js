@@ -10,6 +10,6 @@ const router = express.Router();
 
 router.post("/sale", authenticateUser, createSale);
 router.get("/sale", authenticateUser, showSales);
-router.put("/sale", authenticateUser, editSale);
+router.put("/sale/:id", authenticateUser, editSale);
 
 module.exports = router;
