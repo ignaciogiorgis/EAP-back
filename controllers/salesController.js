@@ -62,16 +62,7 @@ const showSales = async (req, res) => {
 const editSale = async (req, res) => {
   const { id } = req.params;
   const { productName, clientName, quantity, total, paid, saleDate } = req.body;
-  console.log(
-    id,
-    productName,
-    clientName,
-    quantity,
-    total,
-    paid,
-    saleDate,
-    "back"
-  );
+
   try {
     const sale = await Sale.findByPk(id);
 
@@ -104,4 +95,30 @@ const editSale = async (req, res) => {
   }
 };
 
-module.exports = { createSale, showSales, editSale };
+const deleteSale = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const sale = await Sale.findByPk(id);
+
+    if (!sale) {
+      return res.status(404).json({ message: "Sale not found" });
+    }
+    if (Number(sale?.dataValues?.usuarioId) !== req.user.userId) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to delete this sale" });
+    }
+
+    await sale.update({ isDeleted: true });
+
+    res.status(200).json({ message: "Sale deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
+
+module.exports = { createSale, showSales, editSale, deleteSale };
