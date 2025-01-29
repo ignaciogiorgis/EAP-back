@@ -1,5 +1,6 @@
 const { check, validationResult } = require("express-validator");
 const Expense = require("../models/Expense.js");
+const { Op } = require("sequelize");
 
 const createExpense = async (req, res) => {
   await check("name")
@@ -60,13 +61,24 @@ const createExpense = async (req, res) => {
 
 const showExpenses = async (req, res) => {
   const { userId } = req.user;
+  const { q } = req.query; // Obtiene el parámetro de búsqueda desde la URL
+
   try {
-    const expenses = await Expense.findAll({
-      where: {
-        isDeleted: false,
-        usuarioId: userId,
-      },
-    });
+    const whereClause = {
+      isDeleted: false,
+      usuarioId: userId,
+    };
+
+    // Si hay un término de búsqueda, filtra por nombre o descripción
+    if (q) {
+      whereClause[Op.or] = [
+        { name: { [Op.like]: `%${q}%` } }, // Busca coincidencias parciales en el nombre
+        { description: { [Op.like]: `%${q}%` } }, // O en la descripción
+      ];
+    }
+
+    const expenses = await Expense.findAll({ where: whereClause });
+
     res.status(200).json(expenses);
   } catch (error) {
     console.error("Error obtaining expenses:", error);
