@@ -61,7 +61,7 @@ const createExpense = async (req, res) => {
 
 const showExpenses = async (req, res) => {
   const { userId } = req.user;
-  const { q } = req.query; // Obtiene el parámetro de búsqueda desde la URL
+  const { q } = req.query; 
 
   try {
     const whereClause = {
