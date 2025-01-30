@@ -1,5 +1,6 @@
 const { check, validationResult } = require("express-validator");
 const Product = require("../models/Product.js");
+const { Op } = require("sequelize");
 
 const createProduct = async (req, res) => {
   await check("name")
@@ -61,11 +62,23 @@ const createProduct = async (req, res) => {
 
 const showProducts = async (req, res) => {
   const { userId } = req.user;
+  const { q } = req.query;
   try {
+    const whereClause = {
+      isDeleted: false,
+      usuarioId: userId,
+    };
+
+    if (q) {
+      whereClause[Op.or] = [
+        { name: { [Op.like]: `%${q}%` } },
+        { description: { [Op.like]: `%${q}%` } },
+      ];
+    }
+
     const products = await Product.findAll({
       where: {
-        isDeleted: false,
-        usuarioId: userId,
+        whereClause,
       },
     });
     res.status(200).json(products);
