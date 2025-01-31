@@ -52,3 +52,4 @@ coverage/
 *.seed
 
 # Local files for dotenv
+sendgrid.env
