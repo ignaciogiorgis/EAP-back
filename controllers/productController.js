@@ -70,17 +70,13 @@ const showProducts = async (req, res) => {
     };
 
     if (q) {
-      whereClause[Op.or] = [
-        { name: { [Op.like]: `%${q}%` } },
-        { description: { [Op.like]: `%${q}%` } },
-      ];
+      whereClause[Op.or] = [{ name: { [Op.like]: `%${q}%` } }];
     }
 
     const products = await Product.findAll({
-      where: {
-        whereClause,
-      },
+      where: whereClause,
     });
+
     res.status(200).json(products);
   } catch (error) {
     console.error("Error obtaining products:", error);
