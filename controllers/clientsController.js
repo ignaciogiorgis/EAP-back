@@ -1,6 +1,6 @@
 const { check, validationResult } = require("express-validator");
 const Client = require("../models/Client.js");
-
+const { Op } = require("sequelize");
 
 const createClient = async (req, res) => {
   await check("firstName")
@@ -90,13 +90,21 @@ const createClient = async (req, res) => {
 
 const showClients = async (req, res) => {
   const { userId } = req.user;
+  const { q } = req.query;
   try {
+    const whereClause = {
+      isDeleted: false,
+      usuarioId: userId,
+    };
+    if (q) {
+      whereClause[Op.or] = [{ firstName: { [Op.like]: `%${q}%` } }];
+      whereClause[Op.or] = [{ lastName: { [Op.like]: `%${q}%` } }];
+    }
+
     const clients = await Client.findAll({
-      where: {
-        isDeleted: false,
-        usuarioId: userId,
-      },
+      where: whereClause,
     });
+
     res.status(200).json(clients);
   } catch (error) {
     console.error("Error obtaining clients:", error);
