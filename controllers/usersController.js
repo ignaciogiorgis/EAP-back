@@ -3,6 +3,8 @@ const User = require("../models/User.js");
 const { generarId, generarJWT } = require("../helpers/tokens.js");
 const { emailRegister, emailRecover } = require("../helpers/emails.js");
 const bcrypt = require("bcrypt");
+const { uploadImage } = require("../helpers/cloudinary");
+const fs = require("fs");
 
 // Autenticación del user
 const authUser = async (req, res) => {
@@ -244,6 +246,34 @@ const logout = (req, res) => {
   res.status(200).json({ message: "Logout successful" });
 };
 
+const uploadPictureProfile = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No se ha subido ninguna imagen" });
+    }
+
+    const imageUrl = await uploadImage(req.file.path);
+
+    fs.unlinkSync(req.file.path);
+
+    const user = await User.findByPk(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ error: "user no encontrado" });
+    }
+
+    user.picture = imageUrl;
+    await user.save();
+
+    return res.json({
+      message: "Imagen subida con éxito",
+      url: imageUrl,
+    });
+  } catch (error) {
+    console.error("Error al subir la imagen:", error);
+    return res.status(500).json({ error: "Error al subir la imagen" });
+  }
+};
+
 module.exports = {
   register,
   confirmRegister,
@@ -252,4 +282,5 @@ module.exports = {
   newPassword,
   authUser,
   logout,
+  uploadPictureProfile,
 };

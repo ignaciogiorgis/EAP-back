@@ -22,6 +22,10 @@ const User = db.define(
     confirm: {
       type: DataTypes.BOOLEAN,
     },
+    picture: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     scopes: {
