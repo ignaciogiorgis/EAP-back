@@ -7,8 +7,10 @@ const {
   newPassword,
   authUser,
   logout,
+  uploadPictureProfile,
 } = require("../controllers/usersController.js");
-
+const upload = require("../middlewares/multer"); // Middleware para manejar imágenes
+const authenticateUser = require("../middlewares/authenticateUser.js");
 const router = express.Router();
 
 // Ruta para iniciar sesión (POST para autenticación)
@@ -23,5 +25,12 @@ router.get("/confirm/:token", confirmRegister); // Confirmar registro con el tok
 router.post("/recover", resetPassword); // Enviar instrucciones de recuperación
 router.get("/recover/:token", verificationToken); // Comprobar token para reset
 router.post("/recover/:token", newPassword); // Actualizar nueva contraseña
+
+router.post(
+  "/upload-profile",
+  authenticateUser,
+  upload.single("file"),
+  uploadPictureProfile
+);
 
 module.exports = router;
