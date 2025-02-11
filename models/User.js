@@ -11,6 +11,7 @@ const User = db.define(
     email: {
       type: DataTypes.STRING(60),
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -23,6 +24,10 @@ const User = db.define(
       type: DataTypes.BOOLEAN,
     },
     picture: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    message: {
       type: DataTypes.STRING,
       allowNull: true,
     },
