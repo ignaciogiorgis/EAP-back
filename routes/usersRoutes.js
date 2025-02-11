@@ -8,6 +8,7 @@ const {
   authUser,
   logout,
   uploadPictureProfile,
+  showProfile,
 } = require("../controllers/usersController.js");
 const upload = require("../middlewares/multer"); // Middleware para manejar imágenes
 const authenticateUser = require("../middlewares/authenticateUser.js");
@@ -26,6 +27,7 @@ router.post("/recover", resetPassword); // Enviar instrucciones de recuperación
 router.get("/recover/:token", verificationToken); // Comprobar token para reset
 router.post("/recover/:token", newPassword); // Actualizar nueva contraseña
 
+router.get("/profile", authenticateUser, showProfile);
 router.post(
   "/upload-profile",
   authenticateUser,
