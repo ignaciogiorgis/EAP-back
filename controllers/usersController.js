@@ -249,11 +249,12 @@ const logout = (req, res) => {
 const showProfile = async (req, res) => {
   try {
     const user = await User.findByPk(req.user.userId);
+
     if (!user) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
-
     return res.json({
+      id: user.id,
       name: user.name,
       email: user.email,
       picture: user.picture,
@@ -291,6 +292,45 @@ const uploadPictureProfile = async (req, res) => {
   }
 };
 
+const editProfile = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, picture, message } = req.body;
+
+  try {
+    // Busca al usuario por su id
+    const user = await User.findByPk(id);
+
+    // Verifica si el usuario existe
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Verifica si el usuario tiene permisos para editar el perfil
+    if (Number(user?.dataValues?.id) !== req.user.userId) {
+      return res
+        .status(403)
+        .json({ error: "You do not have permission to edit this Profile" });
+    }
+
+    await user.update({
+      name: name ?? user.name, // Si no se pasa un valor, conserva el actual
+      email: email ?? user.email, // Si el correo se puede modificar
+      picture: picture ?? user.picture, // Si la imagen es opcional
+      message: message ?? user.message, // Actualiza el mensaje si se pasa uno
+    });
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user,
+    });
+  } catch (error) {
+    console.error("Error updating Profile:", error);
+    return res
+      .status(500)
+      .json({ error: "There was a problem updating the profile" });
+  }
+};
+
 module.exports = {
   register,
   confirmRegister,
@@ -301,4 +341,5 @@ module.exports = {
   logout,
   uploadPictureProfile,
   showProfile,
+  editProfile,
 };

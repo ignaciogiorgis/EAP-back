@@ -9,6 +9,7 @@ const {
   logout,
   uploadPictureProfile,
   showProfile,
+  editProfile,
 } = require("../controllers/usersController.js");
 const upload = require("../middlewares/multer"); // Middleware para manejar imágenes
 const authenticateUser = require("../middlewares/authenticateUser.js");
@@ -34,5 +35,6 @@ router.post(
   upload.single("file"),
   uploadPictureProfile
 );
+router.put("/profile/:id", authenticateUser, editProfile);
 
 module.exports = router;
