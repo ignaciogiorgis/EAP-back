@@ -33,6 +33,8 @@ const newFields = [
   { name: "profit", type: "FLOAT", allowNull: false, defaultValue: 0 },
   { name: "cost", type: "FLOAT", allowNull: false, defaultValue: 0 },
 ];
+
+
 2️⃣ Ejecuta el script para generar y modificar automáticamente la migración:
 
 bash
@@ -49,6 +51,8 @@ bash
 Copiar
 Editar
 npx sequelize-cli db:migrate
+
+
 4️⃣ Verifica en la base de datos que los nuevos campos se han agregado correctamente.
 
 🔄 Revertir una Migración
