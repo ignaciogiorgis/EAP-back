@@ -5,6 +5,7 @@ const expenseRoute = require("./routes/expensesRoutes.js");
 const productRoute = require("./routes/productsRoute.js");
 const clientRoute = require("./routes/clientsRoutes.js");
 const saleRoute = require("./routes/salesRoutes.js");
+const dashboardRoute = require("./routes/dashboardRoute.js");
 const db = require("./config/db.js");
 
 const app = express();
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/auth", userRoute);
+app.use("/dashboard", dashboardRoute);
 app.use("/dashboard", expenseRoute);
 app.use("/dashboard", productRoute);
 app.use("/dashboard", clientRoute);
