@@ -1,2 +1,5 @@
 # boilerplate-backend
-# EAP-front
+# EAP-Back 
+
+npx sequelize-cli db:migrate
+
