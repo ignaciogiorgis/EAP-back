@@ -21,6 +21,14 @@ const Sale = db.define("sales", {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
+  profit: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+  cost: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
   paid: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
@@ -32,12 +40,19 @@ const Sale = db.define("sales", {
   },
   isDeleted: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false, // Por defecto, no está eliminado
+    defaultValue: false, 
   },
   productId: {
-    type: DataTypes.INTEGER, // Clave foránea que conecta con el modelo Product
+    type: DataTypes.INTEGER, 
     references: {
-      model: "products", // Nombre de la tabla en la base de datos
+      model: "products", 
+      key: "id",
+    },
+  },
+  clientId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: "clients", 
       key: "id",
     },
   },

@@ -26,10 +26,22 @@ const getDashboardStats = async (req, res) => {
       where: { saleDate: { [Op.between]: [firstDayOfMonth, lastDayOfMonth] } },
     });
 
+    const clientsWithPendingPayments = await Client.findAll({
+      include: [
+        {
+          model: Sale,
+          where: { paid: false },
+          attributes: ["total", "saleDate"],
+        },
+      ],
+      attributes: ["id", "name", "email", "phone"],
+    });
+
     res.json({
       totalExpenses: totalExpenses || 0,
       totalSales: totalSales || 0,
       totalCountSales: totalCountSales || 0,
+      clientsWithPendingPayments: clientsWithPendingPayments || 0,
     });
   } catch (error) {
     console.error("Error fetching dashboard stats:", error);
