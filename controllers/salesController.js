@@ -42,7 +42,6 @@ const createSale = async (req, res) => {
 const showSales = async (req, res) => {
   const { userId } = req.user;
   const { q } = req.query;
-
   try {
     const whereClause = {
       isDeleted: false,
