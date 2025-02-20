@@ -4,6 +4,11 @@ const db = require("../config/db.js");
 const User = db.define(
   "users",
   {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true, // Asegura que es la clave primaria
+    },
     name: {
       type: DataTypes.STRING(60),
       allowNull: false,

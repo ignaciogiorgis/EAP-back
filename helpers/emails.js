@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const emailRegister = async (datos) => {
+/* const emailRegister = async (datos) => {
   const transport = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
@@ -12,7 +12,7 @@ const emailRegister = async (datos) => {
 
   const { email, nombre, token } = datos;
 
-  // Enviar el correo
+ Enviar el correo
   await transport.sendMail({
     from: '"Bienvenidos👻" <maddison53@ethereal.email>', // dirección del remitente
     to: email, // destinatario
@@ -38,8 +38,7 @@ const emailRecover = async (datos) => {
   });
 
   const { email, nombre, token } = datos;
-
-  // Enviar el correo
+ Enviar el correo
   await transport.sendMail({
     from: '"Bienvenidos👻" <maddison53@ethereal.email>', // dirección del remitente
     to: email, // destinatario
@@ -54,4 +53,43 @@ const emailRecover = async (datos) => {
   });
 };
 
-module.exports = { emailRegister, emailRecover };
+module.exports = { emailRegister, emailRecover }; */
+
+require("dotenv/config");
+const { MailerSend, EmailParams, Sender, Recipient } = require("mailersend");
+
+const mailerSend = new MailerSend({
+  apiKey: process.env.EMAIL_TOKEN,
+});
+
+const sentFrom = new Sender(
+  "noreply@trial-jy7zpl92jq045vx6.mlsender.net",
+  "Expenses and Profits"
+);
+
+const sendEmail = async (
+  toEmail,
+  userName,
+  subject,
+  htmlContent,
+  textContent
+) => {
+  try {
+    const recipients = [new Recipient(toEmail, userName)];
+
+    const emailParams = new EmailParams()
+      .setFrom(sentFrom)
+      .setTo(recipients)
+      .setSubject(subject)
+      .setHtml(htmlContent)
+      .setText(textContent);
+
+    // Enviar el correo
+    await mailerSend.email.send(emailParams);
+    console.log("📩 Mail successfully sent to:", toEmail);
+  } catch (error) {
+    console.error("❌Error sending email:", error);
+  }
+};
+
+module.exports = { sendEmail };
