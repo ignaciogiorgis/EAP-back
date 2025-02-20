@@ -1,10 +1,10 @@
 const { check, validationResult } = require("express-validator");
 const User = require("../models/User.js");
 const { generarId, generarJWT } = require("../helpers/tokens.js");
-const { emailRegister, emailRecover } = require("../helpers/emails.js");
 const bcrypt = require("bcrypt");
 const { uploadImage } = require("../helpers/cloudinary");
 const fs = require("fs");
+const { sendEmail } = require("../helpers/emails.js");
 
 // Autenticación del user
 const authUser = async (req, res) => {
@@ -54,7 +54,6 @@ const authUser = async (req, res) => {
   });
 };
 
-// Registro del user
 const register = async (req, res) => {
   // Validación
   await check("name")
@@ -98,7 +97,7 @@ const register = async (req, res) => {
     });
   }
 
-  // Crear nuevo user
+  // Crear nuevo usuario
   const user = await User.create({
     name,
     email,
@@ -106,12 +105,23 @@ const register = async (req, res) => {
     token: generarId(),
   });
 
-  // Enviar email de confirmación
-  emailRegister({
-    name: user.name,
-    email: user.email,
-    token: user.token,
-  });
+  // Enviar email de confirmación usando MailerSend
+  const subject = "Confirm your account";
+  const confirmUrl = `${process.env.FRONTEND_URL}/auth/confirm/${user.token}`;
+  const htmlContent = `<p>Hello ${name},</p>
+     <p>Click the following link to confirm your account:</p>
+     <a href="${confirmUrl}">Confirm my account</a>`;
+  const textContent = `Hello ${name}, confirm your account at ${confirmUrl}`;
+
+  // Enviar el correo con la función sendEmail
+  try {
+    await sendEmail(email, name, subject, htmlContent, textContent);
+  } catch (error) {
+    return res.status(500).json({
+      error: "Error sending confirmation email",
+      details: error.message,
+    });
+  }
 
   return res.status(201).json({
     message: "Account created successfully. Verify your email",
