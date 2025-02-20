@@ -5,8 +5,8 @@ const bcrypt = require("bcrypt");
 const { uploadImage } = require("../helpers/cloudinary");
 const fs = require("fs");
 const { sendEmail } = require("../helpers/emails.js");
+const { getEmailTemplate } = require("../utils/emailTemplates");
 
-// Autenticación del user
 const authUser = async (req, res) => {
   await check("email").isEmail().withMessage("Email is required").run(req);
   await check("password")
@@ -55,7 +55,6 @@ const authUser = async (req, res) => {
 };
 
 const register = async (req, res) => {
-  // Validación
   await check("name")
     .notEmpty()
     .withMessage("The name cannot be empty")
@@ -78,7 +77,6 @@ const register = async (req, res) => {
 
   const result = validationResult(req);
 
-  // Verificar si hay error
   if (!result.isEmpty()) {
     return res.status(400).json({
       error: result.array(),
@@ -88,7 +86,6 @@ const register = async (req, res) => {
 
   const { name, email, password } = req.body;
 
-  // Verificar si el user ya está registrado
   const userExist = await User.findOne({ where: { email } });
   if (userExist) {
     return res.status(400).json({
@@ -97,7 +94,6 @@ const register = async (req, res) => {
     });
   }
 
-  // Crear nuevo usuario
   const user = await User.create({
     name,
     email,
@@ -105,17 +101,21 @@ const register = async (req, res) => {
     token: generarId(),
   });
 
-  // Enviar email de confirmación usando MailerSend
-  const subject = "Confirm your account";
   const confirmUrl = `${process.env.FRONTEND_URL}/auth/confirm/${user.token}`;
-  const htmlContent = `<p>Hello ${name},</p>
-     <p>Click the following link to confirm your account:</p>
-     <a href="${confirmUrl}">Confirm my account</a>`;
-  const textContent = `Hello ${name}, confirm your account at ${confirmUrl}`;
 
-  // Enviar el correo con la función sendEmail
+  const htmlContent = getEmailTemplate("confirmation", {
+    name: user.name,
+    confirmUrl,
+  });
+
   try {
-    await sendEmail(email, name, subject, htmlContent, textContent);
+    await sendEmail(
+      email,
+      user.name,
+      "Confirm Your Account",
+      htmlContent,
+      `Hello ${user.name}, confirm your account at ${confirmUrl}`
+    );
   } catch (error) {
     return res.status(500).json({
       error: "Error sending confirmation email",
@@ -161,47 +161,36 @@ const confirmRegister = async (req, res) => {
   }
 };
 
-// Reseteo de contraseña
 const resetPassword = async (req, res) => {
-  // Validación del email
-  await check("email")
-    .isEmail()
-    .withMessage("The email is not correct")
-    .run(req);
-  const result = validationResult(req);
-
-  if (!result.isEmpty()) {
-    return res.status(400).json({
-      error: result.array(),
-    });
-  }
-
   const { email } = req.body;
 
-  // Verificar si el user existe
   const user = await User.findOne({ where: { email } });
   if (!user) {
-    return res.status(404).json({
-      error: "The email does not belong to any user",
-    });
+    return res.status(404).json({ error: "User not found" });
   }
 
-  // Generar token y enviar email
-  user.token = generarId();
-  await user.save();
+  const resetUrl = `${process.env.FRONTEND_URL}/auth/recover/${user.token}`;
 
-  emailRecover({
-    email: user.email,
+  const htmlContent = getEmailTemplate("resetPassword", {
     name: user.name,
-    token: user.token,
+    resetUrl,
   });
 
-  return res.status(200).json({
-    message: "We have sent an email with instructions",
-  });
+  try {
+    await sendEmail(
+      email,
+      user.name,
+      "Reset Your Password",
+      htmlContent,
+      `Hello ${user.name}, reset your password at ${resetUrl}`
+    );
+    res.json({ message: "Password reset email sent successfully." });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Error sending email", details: error.message });
+  }
 };
-
-// Comprobación del token para resetear contraseña
 const verificationToken = async (req, res) => {
   const { token } = req.params;
 
@@ -218,7 +207,6 @@ const verificationToken = async (req, res) => {
   });
 };
 
-// Actualizar la contraseña
 const newPassword = async (req, res) => {
   await check("password")
     .isLength({ min: 6 })
