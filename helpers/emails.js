@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+
 
 /* const emailRegister = async (datos) => {
   const transport = nodemailer.createTransport({

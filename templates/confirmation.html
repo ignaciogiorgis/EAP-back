@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Confirmation</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    "
+  >
+    <table
+      role="presentation"
+      width="100%"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      style="background-color: #f4f4f4; padding: 20px"
+    >
+      <tr>
+        <td align="center">
+          <table
+            role="presentation"
+            width="100%"
+            max-width="600px"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            style="
+              background: #ffffff;
+              padding: 20px;
+              border-radius: 10px;
+              box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            "
+          >
+            <tr>
+              <td align="center" style="padding-bottom: 20px">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/148/148767.png"
+                  width="60"
+                  height="60"
+                  alt="Confirm Icon"
+                  style="display: block"
+                />
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                align="center"
+                style="font-size: 22px; font-weight: bold; color: #333"
+              >
+                ✅ Confirm Your Account
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                align="center"
+                style="font-size: 16px; color: #555; padding: 10px 0"
+              >
+                Hello <strong>{{name}}</strong>,
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                align="center"
+                style="font-size: 14px; color: #555; padding: 10px 20px"
+              >
+                Welcome! Please click the button below to confirm your account
+                and start using our service.
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center" style="padding: 20px">
+                <a
+                  href="{{confirmUrl}}"
+                  style="
+                    background-color: #28a745;
+                    color: #ffffff;
+                    text-decoration: none;
+                    padding: 12px 25px;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    display: inline-block;
+                  "
+                >
+                  Confirm My Account
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                align="center"
+                style="font-size: 12px; color: #777; padding: 10px 20px"
+              >
+                If you didn’t request this, you can ignore this email.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
