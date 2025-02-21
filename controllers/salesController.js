@@ -73,7 +73,7 @@ const editSale = async (req, res) => {
     if (!sale) {
       return res.status(404).json({ error: "Sale not Found" });
     }
-    if (Number(sale?.dataValues?.usuarioId) !== req.user.userId) {
+    if (sale?.dataValues?.usuarioId !== req.user.userId) {
       return res
         .status(403)
         .json({ error: "You do not have permission to edit this Product" });
@@ -108,7 +108,7 @@ const deleteSale = async (req, res) => {
     if (!sale) {
       return res.status(404).json({ message: "Sale not found" });
     }
-    if (Number(sale?.dataValues?.usuarioId) !== req.user.userId) {
+    if (sale?.dataValues?.usuarioId !== req.user.userId) {
       return res
         .status(403)
         .json({ error: "You do not have permission to delete this sale" });
