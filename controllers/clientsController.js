@@ -158,7 +158,7 @@ const editClient = async (req, res) => {
     if (!client) {
       return res.status(404).json({ error: "Client not Found" });
     }
-    if (Number(client?.dataValues?.usuarioId) !== req.user.userId) {
+    if (client?.dataValues?.usuarioId !== req.user.userId) {
       return res
         .status(403)
         .json({ error: "You do not have permission to edit this Client" });
@@ -197,7 +197,7 @@ const deleteClient = async (req, res) => {
     if (!client) {
       return res.status(404).json({ message: "Client not found" });
     }
-    if (Number(client?.dataValues?.usuarioId) !== req.user.userId) {
+    if (client?.dataValues?.usuarioId !== req.user.userId) {
       return res
         .status(403)
         .json({ error: "You do not have permission to delete this client" });

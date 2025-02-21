@@ -24,7 +24,6 @@ const authUser = async (req, res) => {
 
   const { email, password } = req.body;
 
-  // Verificar si el user existe
   const user = await User.findOne({ where: { email } });
   if (!user) {
     return res.status(404).json({
@@ -32,7 +31,6 @@ const authUser = async (req, res) => {
     });
   }
 
-  // Verificar si el user está confirmado
   if (!user.confirm) {
     return res.status(403).json({
       error: "The user is not confirmed",
@@ -44,7 +42,6 @@ const authUser = async (req, res) => {
     return res.status(403).json({ error: "Incorrect password" });
   }
 
-  // Generar JWT y devolverlo
   const tokenJWT = generarJWT({ id: user.id, name: user.name });
 
   return res.status(200).json({
@@ -129,7 +126,6 @@ const register = async (req, res) => {
   });
 };
 
-// Confirmación de registro
 const confirmRegister = async (req, res) => {
   try {
     const { token } = req.params;
@@ -142,11 +138,10 @@ const confirmRegister = async (req, res) => {
       });
     }
 
-    // Confirmar cuenta
     user.token = null;
     user.confirm = true;
 
-    await user.save(); // Guarda los cambios
+    await user.save();
 
     return res.status(200).json({
       message: "Successfully confirmed account",
@@ -249,7 +244,7 @@ const showProfile = async (req, res) => {
     const user = await User.findByPk(req.user.userId);
 
     if (!user) {
-      return res.status(404).json({ error: "Usuario no encontrado" });
+      return res.status(404).json({ error: "User not found" });
     }
     return res.json({
       id: user.id,
@@ -259,34 +254,34 @@ const showProfile = async (req, res) => {
       message: user.message,
     });
   } catch (error) {
-    console.error("Error al obtener el perfil:", error);
-    return res.status(500).json({ error: "Error al obtener el perfil" });
+    console.error("Error getting profile:", error);
+    return res.status(500).json({ error: "Error getting profile" });
   }
 };
 
 const uploadPictureProfile = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: "No se ha subido ninguna imagen" });
+      return res.status(400).json({ error: "No image uploaded" });
     }
     const imageUrl = await uploadImage(req.file.path);
     fs.unlinkSync(req.file.path);
 
     const user = await User.findByPk(req.user.userId);
     if (!user) {
-      return res.status(404).json({ error: "user no encontrado" });
+      return res.status(404).json({ error: "User not found" });
     }
 
     user.picture = imageUrl;
     await user.save();
 
     return res.json({
-      message: "Imagen subida con éxito",
+      message: "Image uploaded successfully",
       url: imageUrl,
     });
   } catch (error) {
-    console.error("Error al subir la imagen:", error);
-    return res.status(500).json({ error: "Error al subir la imagen" });
+    console.error("Error uploading image:", error);
+    return res.status(500).json({ error: "Error uploading image" });
   }
 };
 
@@ -295,26 +290,23 @@ const editProfile = async (req, res) => {
   const { name, email, picture, message } = req.body;
 
   try {
-    // Busca al usuario por su id
     const user = await User.findByPk(id);
 
-    // Verifica si el usuario existe
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Verifica si el usuario tiene permisos para editar el perfil
-    if (Number(user?.dataValues?.id) !== req.user.userId) {
+    if (user?.dataValues?.id !== req.user.userId) {
       return res
         .status(403)
         .json({ error: "You do not have permission to edit this Profile" });
     }
 
     await user.update({
-      name: name ?? user.name, // Si no se pasa un valor, conserva el actual
-      email: email ?? user.email, // Si el correo se puede modificar
-      picture: picture ?? user.picture, // Si la imagen es opcional
-      message: message ?? user.message, // Actualiza el mensaje si se pasa uno
+      name: name ?? user.name,
+      email: email ?? user.email,
+      picture: picture ?? user.picture,
+      message: message ?? user.message,
     });
 
     return res.status(200).json({

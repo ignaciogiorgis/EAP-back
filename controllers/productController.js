@@ -122,7 +122,7 @@ const editProduct = async (req, res) => {
     if (!product) {
       return res.status(404).json({ error: "Product not Found" });
     }
-    if (Number(product?.dataValues?.usuarioId) !== req.user.userId) {
+    if (product?.dataValues?.usuarioId !== req.user.userId) {
       return res
         .status(403)
         .json({ error: "You do not have permission to edit this Product" });
@@ -157,7 +157,7 @@ const deleteProduct = async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-    if (Number(product?.dataValues?.usuarioId) !== req.user.userId) {
+    if (product?.dataValues?.usuarioId!== req.user.userId) {
       return res
         .status(403)
         .json({ error: "You do not have permission to delete this product" });
