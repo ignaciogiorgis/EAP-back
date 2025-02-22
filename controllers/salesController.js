@@ -6,6 +6,7 @@ const createSale = async (req, res) => {
     const { productName, clientName, quantity, total, paid, saleDate } =
       req.body;
     const { userId } = req.user;
+
     const product = await Product.findOne({ where: { name: productName } });
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -15,14 +16,18 @@ const createSale = async (req, res) => {
       return res.status(400).json({ message: "Insufficient stock" });
     }
 
+    const cost = product.cost * quantity;
+    const profit = total - cost;
+
     await product.update({ quantity: product.quantity - quantity });
 
     const sale = await Sale.create({
       productName,
       clientName,
       quantity,
-      price: total / quantity,
       total,
+      cost,
+      profit,
       paid,
       saleDate: new Date(saleDate),
       productId: product.id,
