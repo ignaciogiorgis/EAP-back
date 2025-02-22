@@ -46,7 +46,7 @@ const getDashboardStats = async (req, res) => {
       },
       raw: true,
     });
-
+   
     const bestSellingProduct = await Sale.findOne({
       attributes: [
         "productId",

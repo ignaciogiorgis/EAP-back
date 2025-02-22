@@ -2,8 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 
-// Configuración
-const MODEL_NAME = "sales"; // Nombre de la tabla
+const MODEL_NAME = "sales";
 const TIMESTAMP = new Date().toISOString().replace(/\D/g, "").slice(0, 14);
 const MIGRATION_FILE = path.join(
   "migrations",
@@ -13,12 +12,10 @@ const newFields = [
   { name: "clientId", type: "INTEGER", allowNull: false, defaultValue: 0 },
 ];
 
-// Asegurar que la carpeta migrations existe
 if (!fs.existsSync("migrations")) {
   fs.mkdirSync("migrations");
 }
 
-// Generar contenido de la migración
 const migrationTemplate = `'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
@@ -47,10 +44,8 @@ module.exports = {
   }
 };`;
 
-// Escribir el archivo de migración
 fs.writeFileSync(MIGRATION_FILE, migrationTemplate, "utf8");
 
 console.log(`✅ Migración creada: ${MIGRATION_FILE}`);
 
-// Ejecutar la migración automáticamente
 execSync("npx sequelize-cli db:migrate", { stdio: "inherit" });
