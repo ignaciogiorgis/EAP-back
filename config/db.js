@@ -25,6 +25,15 @@ const db = new Sequelize(
   }
 );
 
+console.log("Configuración de la base de datos:");
+console.log({
+  database: process.env.BD_NOMBRE,
+  user: process.env.BD_USER,
+  password: process.env.BD_PASSWORD,
+  host: process.env.BD_HOST,
+  port: process.env.BD_PORT || "3306",
+});
+
 async function testConnection() {
   try {
     await db.authenticate();
