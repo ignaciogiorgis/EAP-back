@@ -164,6 +164,9 @@ const resetPassword = async (req, res) => {
     return res.status(404).json({ error: "User not found" });
   }
 
+  user.token = generarId();
+  await user.save();
+
   const resetUrl = `${process.env.FRONTEND_URL}/auth/recover/${user.token}`;
 
   const htmlContent = getEmailTemplate("resetPassword", {
