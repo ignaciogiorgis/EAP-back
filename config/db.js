@@ -1,15 +1,15 @@
 const { Sequelize } = require("sequelize");
-const dotenv = require("dotenv");
 
-dotenv.config({ path: ".env" });
+// No necesitamos dotenv en Railway, las variables ya están en process.env
+// dotenv.config({ path: ".env" }); // Comentá esta línea o sacala
 
 const db = new Sequelize(
   process.env.BD_NOMBRE,
   process.env.BD_USER,
-  process.env.BD_PASSWORD ?? "",
+  process.env.BD_PASSWORD || "", // Usamos || en vez de ?? por compatibilidad
   {
     host: process.env.BD_HOST,
-    port: process.env.BD_PORT ?? "3306", // Usa la variable BD_PORT si existe
+    port: process.env.BD_PORT || "3306",
     dialect: "mysql",
     define: {
       timestamps: true,
@@ -20,6 +20,8 @@ const db = new Sequelize(
       acquire: 30000,
       idle: 10000,
     },
+    // Agregamos esto para debug en despliegue
+    logging: console.log,
   }
 );
 
