@@ -24,6 +24,8 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.options("*", cors());
 app.use((req, res, next) => {
   console.log(
     `Petición recibida: ${req.method} ${req.url} desde ${req.headers.origin}`
