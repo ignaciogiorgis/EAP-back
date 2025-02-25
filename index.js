@@ -15,7 +15,7 @@ app.use(
     extended: true,
   })
 );
-
+console.log("FRONTEND_URL configurado:", process.env.FRONTEND_URL);
 const allowedOrigins = [
   process.env.FRONTEND_URL || "http://localhost:3000",
   "https://eap-front.vercel.app",
