@@ -15,7 +15,7 @@ app.use(
     extended: true,
   })
 );
-console.log("FRONTEND_URL configurado:", process.env.FRONTEND_URL);
+
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:3000",
@@ -24,12 +24,6 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-app.use((req, res, next) => {
-  console.log(
-    `Petición recibida: ${req.method} ${req.url} desde ${req.headers.origin}`
-  );
-  next();
-});
 
 app.use(express.json());
 app.use(express.static("public"));
@@ -47,7 +41,7 @@ const startServer = async () => {
     await db.sync();
     console.log("Conexión establecida exitosamente.");
 
-    const port = process.env.PORT || 5000;
+    const port = process.env.PORT || 8080;
     app.listen(port, () => {
       console.log(`El servidor funciona en el puerto ${port}`);
     });

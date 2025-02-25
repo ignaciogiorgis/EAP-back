@@ -1,12 +1,12 @@
 const { Sequelize } = require("sequelize");
+//const dotenv = require("dotenv");
 
-// No necesitamos dotenv en Railway, las variables ya están en process.env
-// dotenv.config({ path: ".env" }); // Comentá esta línea o sacala
+//dotenv.config({ path: ".env" });
 
 const db = new Sequelize(
   process.env.BD_NOMBRE,
   process.env.BD_USER,
-  process.env.BD_PASSWORD || "", // Usamos || en vez de ?? por compatibilidad
+  process.env.BD_PASSWORD || "",
   {
     host: process.env.BD_HOST,
     port: process.env.BD_PORT || "3306",
@@ -20,19 +20,9 @@ const db = new Sequelize(
       acquire: 30000,
       idle: 10000,
     },
-    // Agregamos esto para debug en despliegue
     logging: console.log,
   }
 );
-
-console.log("Configuración de la base de datos:");
-console.log({
-  database: process.env.BD_NOMBRE,
-  user: process.env.BD_USER,
-  password: process.env.BD_PASSWORD,
-  host: process.env.BD_HOST,
-  port: process.env.BD_PORT || "3306",
-});
 
 async function testConnection() {
   try {
