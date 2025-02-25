@@ -21,6 +21,7 @@ const allowedOrigins = [
   "https://eap-front.vercel.app", // Agregamos manualmente el dominio de Vercel
 ];
 
+
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -52,7 +53,7 @@ const startServer = async () => {
     await db.sync();
     console.log("Conexión establecida exitosamente.");
 
-    const port = process.env.PORT || 5000;
+    const port = process.env.PORT || 8080;
     app.listen(port, () => {
       console.log(`El servidor funciona en el puerto ${port}`);
     });
