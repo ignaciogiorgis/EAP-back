@@ -15,10 +15,10 @@ app.use(
     extended: true,
   })
 );
-
+console.log("FRONTEND_URL configurado:", process.env.FRONTEND_URL);
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "https://eap-front.vercel.app/",
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
