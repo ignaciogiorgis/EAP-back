@@ -15,21 +15,26 @@ app.use(
     extended: true,
   })
 );
-console.log("FRONTEND_URL configurado:", process.env.FRONTEND_URL);
+
+const allowedOrigins = [
+  process.env.FRONTEND_URL || "http://localhost:3000",
+  "https://eap-front.vercel.app", // Agregamos manualmente el dominio de Vercel
+];
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-app.use((req, res, next) => {
-  console.log(
-    `Petición recibida: ${req.method} ${req.url} desde ${req.headers.origin}`
-  );
-  next();
-});
 
 app.use(express.json());
 app.use(express.static("public"));
