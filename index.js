@@ -24,6 +24,12 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+app.use((req, res, next) => {
+  console.log(
+    `Petición recibida: ${req.method} ${req.url} desde ${req.headers.origin}`
+  );
+  next();
+});
 
 app.use(express.json());
 app.use(express.static("public"));
