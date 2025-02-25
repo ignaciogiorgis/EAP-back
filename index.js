@@ -18,7 +18,7 @@ app.use(
 
 const allowedOrigins = [
   process.env.FRONTEND_URL || "http://localhost:3000",
-  "https://eap-front.vercel.app", // Agregamos manualmente el dominio de Vercel
+  "https://eap-front.vercel.app",
 ];
 
 app.use(
@@ -35,6 +35,13 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+app.use((req, res, next) => {
+  console.log(
+    `Petición recibida: ${req.method} ${req.url} desde ${req.headers.origin}`
+  );
+  next();
+});
 
 app.use(express.json());
 app.use(express.static("public"));
